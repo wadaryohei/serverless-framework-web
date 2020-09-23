@@ -11,7 +11,9 @@ amplify init
 ```
 
 ①バックエンド側でdeploy後に生成されるaws-exportsをコピーしてきて中身の値はenvに記載。
+
 ②バックエンド側で生成されるFunctionsのHello Functionのエンドポイントをenvに記載。
+
 ③appSyncのconsoleにいってSchemaからコードを生成するためにadd codegenする。
 
 バックエンド側がしっかりとdeployされていれば恐らくこれだけで動くようになるはず。
