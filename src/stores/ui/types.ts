@@ -1,0 +1,1 @@
+export const UI_MODAL_TOGGLE = 'UI_MODAL_TOGGLE'
