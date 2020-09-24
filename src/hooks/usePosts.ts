@@ -3,6 +3,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import * as queries from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
 import * as graphAPI from '../API'
+import { useSelector } from './useSelector';
 
 //------------------------------
 // Type
@@ -12,7 +13,7 @@ export type usePostsType = {
   // Handler
   //------------------------------
   onCreate: () => Promise<void>
-  onUpdate: (postId: string) => Promise<void>
+  onUpdate: (postId: string, userId: string) => Promise<void>
   onDelete: (postId: string | undefined) => Promise<void>
 
   //------------------------------
@@ -40,6 +41,7 @@ export type usePostsType = {
 //------------------------------
 export const usePosts = (): usePostsType => {
 
+  const userSelector = useSelector()
   const [_lists, _setLists] = useState<graphAPI.ListPostQuery | undefined>()
   const [_post, _setPost] = useState<string>('')
   const [_updatePost, _setUpdatePost] = useState<{[key: string]: string}>({})
@@ -55,19 +57,19 @@ export const usePosts = (): usePostsType => {
       alert('1文字以上入力してください')
       return
     }
-    await API.graphql(graphqlOperation(mutations.createPost, { input: { content: _post }}))
+    await API.graphql(graphqlOperation(mutations.createPost, { input: { userId: `${userSelector.userState().username}`, content: _post }}))
     _setPost('')
   }
 
   /**
    * 投稿を更新する処理
    */
-  const onUpdate = async(postId: string): Promise<void> => {
+  const onUpdate = async(postId: string, userId: string): Promise<void> => {
     if (_updatePost[`post-${postId}`]?.length === 0) {
       alert('1文字以上入力してください')
       return
     }
-    await API.graphql(graphqlOperation(mutations.updatePost, { input: { content: _updatePost[`post-${postId}`], postId: postId }}))
+    await API.graphql(graphqlOperation(mutations.updatePost, { input: { content: _updatePost[`post-${postId}`], postId: postId, userId: userId }}))
     _setUpdatePost({})
     alert('投稿を更新しました')
     window.location.reload()
