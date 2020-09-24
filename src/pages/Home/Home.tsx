@@ -8,6 +8,9 @@ import { useModalEpic } from '../../hooks/epic/useModalEpic';
 import { useSelector } from '../../hooks/useSelector';
 import { useAPI } from '../../hooks/useAPI';
 
+import { API, graphqlOperation } from "aws-amplify";
+import * as queries from '../..//graphql/queries';
+
 //------------------------------
 // Component
 //------------------------------
@@ -25,6 +28,7 @@ const Home = () => {
   const userSelector = selector.userState()
   const epic = useModalEpic(posts.onCreate, modal.onToggleModal)
 
+  console.log(posts.getListPost()?.listPost)
   //------------------------------
   // LifeCycle
   //------------------------------
@@ -32,6 +36,9 @@ const Home = () => {
 
     // API Gatewayを認証有りで叩いてみる
     const init = async () => {
+      const res = await API.graphql(graphqlOperation(queries.getUser, { userId: 'hogehoge' }))
+      console.log(res)
+
       await api.fetchHello().then((result) => {
         console.log(result)
       })
@@ -70,6 +77,7 @@ const Home = () => {
                         fullWidth
                       />
                     </Box>
+                    <Typography component={"p"} variant={"body2"} color="textSecondary">userId : {post?.userId}</Typography>
                     <Typography component={"p"} variant={"body2"} color="textSecondary">postId : {post?.postId}</Typography>
                   </Box>
                   <Box display="flex" mb={2}>
@@ -77,7 +85,7 @@ const Home = () => {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => posts.onUpdate(`${post?.postId}`)}
+                        onClick={() => posts.onUpdate(post?.postId, post?.userId)}
                       >
                         更新する
                       </Button>
