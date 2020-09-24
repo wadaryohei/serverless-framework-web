@@ -5,6 +5,7 @@
 export type CreatePostInput = {
   postId?: string | null,
   content: string,
+  userId: string,
   createdAt?: string | null,
   updatedAt?: string | null,
 };
@@ -16,6 +17,7 @@ export type DeletePostInput = {
 export type UpdatePostInput = {
   postId: string,
   content: string,
+  userId: string,
 };
 
 export type CreatePostMutationVariables = {
@@ -27,6 +29,7 @@ export type CreatePostMutation = {
     __typename: "Post",
     postId: string,
     content: string,
+    userId: string,
   } | null,
 };
 
@@ -40,6 +43,7 @@ export type DeletePostMutation = {
     __typename: "Post",
     postId: string,
     content: string,
+    userId: string,
   } | null,
 };
 
@@ -52,6 +56,20 @@ export type UpdatePostMutation = {
     __typename: "Post",
     postId: string,
     content: string,
+    userId: string,
+  } | null,
+};
+
+export type GetUserQueryVariables = {
+  userId: string,
+};
+
+export type GetUserQuery = {
+  getUser:  {
+    __typename: "User",
+    userId: string,
+    username: string,
+    email: string,
   } | null,
 };
 
@@ -64,6 +82,7 @@ export type GetPostQuery = {
     __typename: "Post",
     postId: string,
     content: string,
+    userId: string,
   } | null,
 };
 
@@ -72,5 +91,6 @@ export type ListPostQuery = {
     __typename: "Post",
     postId: string,
     content: string,
+    userId: string,
   } >,
 };

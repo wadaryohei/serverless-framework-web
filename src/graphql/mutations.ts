@@ -7,6 +7,7 @@ export const createPost = /* GraphQL */ `
     createPost(input: $input) {
       postId
       content
+      userId
     }
   }
 `;
@@ -15,6 +16,7 @@ export const deletePost = /* GraphQL */ `
     deletePost(input: $input, expectedVersion: $expectedVersion) {
       postId
       content
+      userId
     }
   }
 `;
@@ -23,6 +25,7 @@ export const updatePost = /* GraphQL */ `
     updatePost(input: $input) {
       postId
       content
+      userId
     }
   }
 `;
