@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router";
 import { AuthActions } from '../stores/auth/actions';
 import { useSelector } from './useSelector';
-import * as PAGE from '../constants/index';
 import { initialState } from '../stores/auth/reducers';
+import * as PAGE from '../constants/index';
 
 //------------------------------
 // Type

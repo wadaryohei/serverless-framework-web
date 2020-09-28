@@ -1,11 +1,15 @@
 import { endPoints } from '../constants/';
 import { useAxios } from './useAxios';
+import { API, graphqlOperation } from "aws-amplify";
+import { queries } from '../services/graphql';
+import { useSelector } from './useSelector';
 
 //------------------------------
 // Type
 //------------------------------
 export type useAPIType = {
   fetchHello: () => Promise<any>
+  fetchUser: () => Promise<void>
 }
 
 //------------------------------
@@ -14,6 +18,7 @@ export type useAPIType = {
 export const useAPI = (): useAPIType => {
 
   const apiaxios = useAxios()
+  const selector = useSelector()
 
   /**
    * functionsのhelloをfetch
@@ -29,5 +34,10 @@ export const useAPI = (): useAPIType => {
     }
   }
 
-  return { fetchHello }
+  const fetchUser = async (): Promise<void> => {
+    const res = await API.graphql(graphqlOperation(queries.getUser, { userId: selector.userState().username }))
+    console.log(res)
+  }
+
+  return { fetchHello, fetchUser }
 }

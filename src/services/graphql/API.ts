@@ -1,11 +1,7 @@
-/* tslint:disable */
-/* eslint-disable */
-//  This file was automatically generated and should not be edited.
-
 export type CreatePostInput = {
   postId?: string | null,
+  username: string,
   content: string,
-  userId: string,
   createdAt?: string | null,
   updatedAt?: string | null,
 };
@@ -16,8 +12,8 @@ export type DeletePostInput = {
 
 export type UpdatePostInput = {
   postId: string,
+  username: string,
   content: string,
-  userId: string,
 };
 
 export type CreatePostMutationVariables = {
@@ -28,8 +24,8 @@ export type CreatePostMutation = {
   createPost:  {
     __typename: "Post",
     postId: string,
+    username: string,
     content: string,
-    userId: string,
   } | null,
 };
 
@@ -42,8 +38,8 @@ export type DeletePostMutation = {
   deletePost:  {
     __typename: "Post",
     postId: string,
+    username: string,
     content: string,
-    userId: string,
   } | null,
 };
 
@@ -55,8 +51,8 @@ export type UpdatePostMutation = {
   updatePost:  {
     __typename: "Post",
     postId: string,
+    username: string,
     content: string,
-    userId: string,
   } | null,
 };
 
@@ -81,8 +77,8 @@ export type GetPostQuery = {
   getPost:  {
     __typename: "Post",
     postId: string,
+    username: string,
     content: string,
-    userId: string,
   } | null,
 };
 
@@ -90,7 +86,7 @@ export type ListPostQuery = {
   listPost:  Array< {
     __typename: "Post",
     postId: string,
+    username: string,
     content: string,
-    userId: string,
   } >,
 };
