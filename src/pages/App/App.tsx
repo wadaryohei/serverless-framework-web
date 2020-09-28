@@ -15,6 +15,7 @@ import * as PAGE from '../../constants/index';
 const App = () =>{
 
   const auth = useAuth()
+
   useEffect(() => {
     auth.initUser()
     // eslint-disable-next-line

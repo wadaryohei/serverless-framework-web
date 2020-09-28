@@ -3,7 +3,6 @@ import { RootState } from '../stores/reducers'
 import { authState } from '../stores/auth/model'
 import { uiState } from '../stores/ui/model'
 
-
 //------------------------------
 // Type
 //------------------------------
@@ -23,12 +22,7 @@ export const useSelector = (): useSelectorType => {
    * Userのストアを返す
    */
   const userState = (): authState => {
-    return {
-      auth: userSelector.auth,
-      username: userSelector.username,
-      email: userSelector.email,
-      isAuth: userSelector.isAuth
-    }
+    return userSelector
   }
 
   /**

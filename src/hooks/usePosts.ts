@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
-import * as queries from '../graphql/queries';
-import * as mutations from '../graphql/mutations';
-import * as graphAPI from '../API'
+import { queries, mutations } from '../services/graphql';
+import * as graphAPI from '../services/graphql/API'
 import { useSelector } from './useSelector';
 
 //------------------------------
@@ -31,6 +30,11 @@ export type usePostsType = {
   setUpdatePost: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 
   //------------------------------
+  // methods
+  //------------------------------
+  isDelete: (username: string) => boolean
+
+  //------------------------------
   // Initilize
   //------------------------------
   initFetch: (mount: React.MutableRefObject<boolean>) => Promise<void>
@@ -57,19 +61,19 @@ export const usePosts = (): usePostsType => {
       alert('1文字以上入力してください')
       return
     }
-    await API.graphql(graphqlOperation(mutations.createPost, { input: { userId: `${userSelector.userState().username}`, content: _post }}))
+    await API.graphql(graphqlOperation(mutations.createPost, { input: { username: `${userSelector.userState().username}`, content: _post }}))
     _setPost('')
   }
 
   /**
    * 投稿を更新する処理
    */
-  const onUpdate = async(postId: string, userId: string): Promise<void> => {
+  const onUpdate = async(postId: string, username: string): Promise<void> => {
     if (_updatePost[`post-${postId}`]?.length === 0) {
       alert('1文字以上入力してください')
       return
     }
-    await API.graphql(graphqlOperation(mutations.updatePost, { input: { content: _updatePost[`post-${postId}`], postId: postId, userId: userId }}))
+    await API.graphql(graphqlOperation(mutations.updatePost, { input: { content: _updatePost[`post-${postId}`], postId: postId, username: username }}))
     _setUpdatePost({})
     alert('投稿を更新しました')
     window.location.reload()
@@ -141,6 +145,19 @@ export const usePosts = (): usePostsType => {
   }
 
   //------------------------------
+  // methods
+  //------------------------------
+  /**
+   * 現在のログイン中のユーザーとポストしたユーザーが違う場合
+   */
+  const isDelete = (username: string): boolean => {
+    if (username !== userSelector.userState().username) {
+      return false
+    }
+    return true
+  }
+
+  //------------------------------
   // Initilize
   //------------------------------
   /**
@@ -172,6 +189,7 @@ export const usePosts = (): usePostsType => {
     onCreate,
     onUpdate,
     onDelete,
+    isDelete,
     initFetch
   }
 }

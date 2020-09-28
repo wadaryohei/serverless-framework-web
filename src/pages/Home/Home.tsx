@@ -6,10 +6,6 @@ import { usePosts } from '../../hooks/usePosts';
 import { useModal } from '../../hooks/useModal';
 import { useModalEpic } from '../../hooks/epic/useModalEpic';
 import { useSelector } from '../../hooks/useSelector';
-import { useAPI } from '../../hooks/useAPI';
-
-import { API, graphqlOperation } from "aws-amplify";
-import * as queries from '../..//graphql/queries';
 
 //------------------------------
 // Component
@@ -24,28 +20,15 @@ const Home = () => {
   const auth = useAuth()
   const modal = useModal()
   const selector = useSelector()
-  const api = useAPI()
-  const userSelector = selector.userState()
   const epic = useModalEpic(posts.onCreate, modal.onToggleModal)
 
-  console.log(posts.getListPost()?.listPost)
   //------------------------------
   // LifeCycle
   //------------------------------
   useEffect(() => {
 
-    // API Gatewayを認証有りで叩いてみる
-    const init = async () => {
-      const res = await API.graphql(graphqlOperation(queries.getUser, { userId: 'hogehoge' }))
-      console.log(res)
-
-      await api.fetchHello().then((result) => {
-        console.log(result)
-      })
-    }
-    init()
-
     posts.initFetch(mount)
+
     return () => {
       mount.current = false
     }
@@ -58,7 +41,7 @@ const Home = () => {
       <Container>
         <Typography component={"h2"} variant={"h5"}>
           <Box fontWeight="fontWeightBold">
-            {userSelector.username}でログイン中です
+            {selector.userState().username}でログイン中です
           </Box>
           <Box py={4}><Divider /></Box>
         </Typography>
@@ -77,7 +60,7 @@ const Home = () => {
                         fullWidth
                       />
                     </Box>
-                    <Typography component={"p"} variant={"body2"} color="textSecondary">userId : {post?.userId}</Typography>
+                    <Typography component={"p"} variant={"body2"} color="textSecondary">userId : {post?.username}</Typography>
                     <Typography component={"p"} variant={"body2"} color="textSecondary">postId : {post?.postId}</Typography>
                   </Box>
                   <Box display="flex" mb={2}>
@@ -85,18 +68,22 @@ const Home = () => {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => posts.onUpdate(post?.postId, post?.userId)}
+                        onClick={() => posts.onUpdate(post?.postId, post?.username)}
                       >
                         更新する
                       </Button>
                     </Box>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => posts.onDelete(post?.postId)}
-                    >
-                      投稿を削除する
-                    </Button>
+
+                    {
+                      posts.isDelete(post?.username) &&
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => posts.onDelete(post?.postId)}
+                        >
+                          投稿を削除する
+                        </Button>
+                    }
                   </Box>
 
                   <Box pt={8} pb={4}><Divider /></Box>
