@@ -8,18 +8,20 @@ import { Auth } from '@aws-amplify/auth'
 import config from './aws-exports';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux'
+import { createLogger } from 'redux-logger';
 import { reducers } from './stores/reducers'
-import { loggers } from './stores/middlewares'
+
+const loggers = createLogger({ diff: true, collapsed: true })
 const stores = createStore(reducers, applyMiddleware(loggers))
 Amplify.configure(config)
 Auth.configure(config);
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={stores}>
       <App />
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 
